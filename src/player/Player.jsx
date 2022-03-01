@@ -30,7 +30,7 @@ function Player() {
     }
 
     return ( 
-        <div className="player w-full h-full bg-dark-50 text-white relative">
+        <div className="player w-full h-full bg-[#394E60] text-white text-2xl relative">
             {vid ? <Video vid={vid} setVid={setVid} setSettings={setSettings} settingsRef={settingsRef} /> : <Input vid={vid} setVid={setVid} />}
             {settingsRef.current.isOpened && vid && <Settings setSettings={setSettings} settingsRef={settingsRef} />}
         </div>

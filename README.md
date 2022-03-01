@@ -39,3 +39,5 @@ use `KeyI` to Volume Up
 <br>
 use `KeyN` to Volume down
 <br>
+
+- [ ] Add video loading state and catch fake urls.
