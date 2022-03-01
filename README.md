@@ -6,13 +6,13 @@
 well, I always wanted that fancy keyboard shortcuts and the ultimate control of the video with settings and all of that thing.
 and here is it. 
 a video player with keyboard shortcuts and fancy futures.
-Wanna give it a [Try](https://ay-player.netlify.app/player)
+Wanna give it a [Try](https://ay-player.netlify.app/player)!?.
 
 <br>
 
 # USING
 first navigate to [https://ay-player.netlify.app/player](https://ay-player.netlify.app/player).
-to use it the keyboard shortcuts, follow next.
+to use the keyboard shortcuts, follow next.
 
 ## Keyboard shortcuts
 // skipping 
@@ -31,10 +31,8 @@ use `KeyK` to go back by 5 Seconds
 use `KeyJ` to go back by 20 Seconds
 <br>
 use `KeyH` to go back by 60 Seconds
-
 <br>
 <br>
-
 // changing volume
 <br>
 use `KeyI` to Volume Up
