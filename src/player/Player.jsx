@@ -10,7 +10,7 @@ function Player() {
     // this has to props first one is the boolean so it indicates wether it is open or not,
     //  the second value which is object and it indicates the settings.
     const [settings, _setSettings] = useState({
-        isOpened: true,
+        isOpened: false,
         showTimelineProgress : {
             type: "boolean", 
             value: false

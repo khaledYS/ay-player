@@ -8,6 +8,7 @@ const Settings = ({setSettings, settingsRef}) => {
     return (
         <div className="w-full h-full absolute top-0 left-0 bg-transparent grid place-items-center">
             <div className="bg-white p-4 border-4 border-gray-700 rounded-lg text-black">
+                <h1>** BETA **</h1>
                 {/* we filter "Isopened" bcz it is a way to declare wether the settings panel is opened or not. */}
                 {Object.keys(filterObject(settingsRef.current, (val, key) => key != "isOpened" )).map((key, idx)=>{
                     let settings = settingsRef.current;
