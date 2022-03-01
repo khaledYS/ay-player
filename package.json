@@ -1,0 +1,27 @@
+{
+  "name": "ay-player",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "preview": "vite preview",
+    "tailwind:watch": "npx tailwindcss -i ./src/styles/App.css -o ./src/tailwind/output.css --watch",
+    "tailwind:build": "npx tailwindcss -i ./src/styles/App.css -o ./dist/assets/output.css --minify",
+    "build": "npm run vite:build && npm run tailwind:build",
+    "dev": "start npm run tailwind:watch && npm run vite:dev"
+  },
+  "dependencies": {
+    "daisyui": "^2.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.2.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.7",
+    "tailwindcss": "^3.0.23",
+    "vite": "^2.8.0"
+  }
+}
