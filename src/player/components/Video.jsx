@@ -52,8 +52,9 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 if(!mounted.current) return ;
                 
                 const changeCurrentTime = (vid, currentTime) =>{
-                    setVideoIsLoading(true);
                     vid.currentTime = currentTime;
+                    inputEl.current.value = vidEl.current.currentTime;
+                    setVideoIsLoading(true);
                 }
                 
                 let code = e.code,
