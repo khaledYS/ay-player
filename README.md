@@ -40,4 +40,7 @@ use `KeyI` to Volume Up
 use `KeyN` to Volume down
 <br>
 
-- [ ] Add video loading state and catch fake urls.
+- [x] Add video loading state and catch fake urls.
+- [ ] when clicking on number it should calculate the percintage of the video and depending on the number it should move to that percentage number in the current time of the video
+- [ ] add when the user goes the player/:url, it should open the video with url without displaying the input component.
+- [ ] add the mecanizm of duration time and current time in the controls div.

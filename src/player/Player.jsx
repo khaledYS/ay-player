@@ -21,6 +21,10 @@ function Player() {
             max: "0.5",
             step: "0.01",
             value: "0.1"
+        },
+        backgroundColor: {
+            type: "color",
+            value: "black"
         }
     })
     const settingsRef = useRef(settings);

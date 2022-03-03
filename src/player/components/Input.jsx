@@ -12,13 +12,12 @@ function Input({setVid, vid}) {
                     let file = e.target.files[0];
                     let url = window.URL.createObjectURL(file);
                     setVid({name:file.name, url})
-                    console.log(url, file)
                 }}
                  />
                  <h1 className="my-8">- OR -</h1>
                  {/* via url */}
-                 <form className="flex input-group items-center justify-center" onSubmit={(e)=>{e.preventDefault();setVid({url:e.target.input.value, name:"Anonymouse"})}}>
-                     <input type="text" id="input" placeholder="Enter Url" className="input input-ghost bg-slate-500 !text-white " min="10" required={true} require={true} />
+                 <form className="flex input-group items-center justify-center" onSubmit={(e)=>{e.preventDefault();setVid({url:e.target.input.value, name:"Url video"})}}>
+                     <input type="text" id="input" placeholder="Enter Url" className="input input-ghost bg-slate-500 !text-white " min="10" required />
                      <button className="btn btn-square btn-accent">GO!</button>
                  </form>
         </div>

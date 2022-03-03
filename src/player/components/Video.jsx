@@ -7,7 +7,8 @@ import { toggleBool } from "../../utils";
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
     const [videoState, setVideoState] = useState(false);
-
+    const [videoIsLoading, setVideoIsLoading] = useState(true);
+    const [videoErorr, setVideoError] = useState(false);
 
 
     // states can be changed even if its in a listener;
@@ -33,21 +34,140 @@ function Video({vid, setVid, settingsRef, setSettings}) {
     useEffect(()=>{
         setVolume(volumeRef.current)
         setMuted(mutedRef.current)
-        console.log("updated   .")
     }, [mutedRef, volumeRef])
 
     useEffect(()=>{
         mounted.current = true;
 
+        
         function update(){
-
+            
             function updateRangeInput(){
                 if(!mounted.current) return ;
                 inputEl.current.value = vidEl.current.currentTime;
             }
-
+            
+            // handle keyboard shortcuts
+            window.addEventListener("keydown", (e)=>{
+                if(!mounted.current) return ;
+                
+                const changeCurrentTime = (vid, currentTime) =>{
+                    setVideoIsLoading(true);
+                    vid.currentTime = currentTime;
+                }
+                
+                let code = e.code,
+                key = e.key,
+                kc = e.keyCode;
+                
+                // toggle settings panel 
+                if(kc == 83){
+                    vidEl.current.pause()
+                    setSettings({...settingsRef.current, isOpened: toggleBool(settingsRef.current.isOpened)});
+                }
+                // handle esc button
+                if(key == "Escape"){
+                    setPopup(true)
+                }
+                // if the settings panel is open or there is an error in the video, don't activate any of video keyboard shortcuts.
+                if(settingsRef.current.isOpened) return;
+                if(videoErorr) return;                
+                
+                
+                // handle moving the current time
+                // '
+                if(kc == 222){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime + 60
+                    )
+                }
+    
+                // ;
+                if(kc == 186){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime + 20
+                    )
+                }
+                // l
+                if(kc == 76 || kc == 39){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime + 5
+                    )
+                }
+                // j
+                if(kc == 74){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime - 20
+                    )
+                }
+                // l
+                if(kc == 75 || kc == 37){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime - 5
+                    )
+                }
+                // h
+                if(kc == 72){
+                    changeCurrentTime(
+                        vidEl.current,
+                        vidEl.current.currentTime - 60
+                    )
+                }
+                
+                
+                // handle stop and play 
+                // space
+                if(kc == 32){
+                    vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause();
+                }
+                
+                if(e.code == "KeyM"){
+                    if(mutedRef.current){
+                        setMuted(false)
+                    }else{
+                        setMuted(true)
+                    }
+                }
+    
+                // // volumeUp : i,arrowUP
+                if(kc == 73 || kc == 38){
+                    let newVol = volumeRef.current + Number(settingsRef.current.changeVolumeBy.value);
+                    if(newVol > 1){
+                        newVol = 1;
+                    }
+                    setVolume(newVol);
+                }
+                // volumeDown : n, arrowDown
+                if(kc == 78 || kc == 40){
+                    let newVol = volumeRef.current - Number(settingsRef.current.changeVolumeBy.value);
+                    if(newVol < 0){
+                        newVol = 0;
+                    }
+                    setVolume(newVol);
+                }
+    
+    
+    
+            }, true)
+            
+            vidEl.current.onerror = function(e) {
+                setVideoError(e.target.error);
+            }
+            vidEl.current.onwaiting = function() {
+                setVideoIsLoading(true)    
+            }
+            vidEl.current.onsatlled = function() {
+                setVideoIsLoading(true)    
+            }
+            vidEl.current.addEventListener("canplay",()=>{
+                setVideoIsLoading(false);
+            })
             vidEl.current.addEventListener("loadeddata", (e)=>{
-                console.log()
                 mounted.current = true;
     
                 inputEl.current.setAttribute("max", vidEl.current.duration);
@@ -59,91 +179,13 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 // when the vid is true;
                 vidEl.current.onpause = ()=>{setVideoState(false)}
                 vidEl.current.onplay = ()=>{setVideoState(true)}
-    
-    
                 
-                // handle keyboard shortcuts
-                window.addEventListener("keydown", (e)=>{
-                    
-                    if(!mounted.current) return ;
-                    
-                    let code = e.code,
-                    key = e.key,
-                    kc = e.keyCode;
-                    
-                    console.log(kc)
-                    
-                    // handle esc button
-                    if(key == "Escape"){
-                        setPopup(true)
-                    }
-                    
-                    
-                    // handle moving the current time
-                    // '
-                    if(kc == 222) vidEl.current.currentTime += 60;
-                    // ;
-                    if(kc == 186){
-                        vidEl.current.currentTime += 20;
-                    }
-                    // l
-                    if(kc == 76 || kc == 39){
-                        vidEl.current.currentTime += 5;
-                    }
-                    // j
-                    if(kc == 74){
-                        vidEl.current.currentTime -= 20;
-                    }
-                    // l
-                    if(kc == 75 || kc == 37){
-                        vidEl.current.currentTime -= 5;
-                    }
-                    // h
-                    if(kc == 72) vidEl.current.currentTime -= 60;
-                    
-                    
-                    // handle stop and play 
-                    // space
-                    if(kc == 32) vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause();
-                    
-                    if(e.code == "KeyM"){
-                        if(mutedRef.current){
-                            console.log("hi")
-                            setMuted(false)
-                        }else{
-                            setMuted(true)
-                        }
-                    }
-
-                    // // volumeUp : i,arrowUP
-                    if(kc == 73 || kc == 38){
-                        let newVol = volumeRef.current + Number(settingsRef.current.changeVolumeBy.value);
-                        if(newVol > 1){
-                            newVol = 1;
-                        }
-                        setVolume(newVol);
-                    }
-                    // volumeDown : n, arrowDown
-                    if(kc == 78 || kc == 40){
-                        let newVol = volumeRef.current - Number(settingsRef.current.changeVolumeBy.value);
-                        if(newVol < 0){
-                            newVol = 0;
-                        }
-                        setVolume(newVol);
-                    }
-
-
-                    // toggle settings panel 
-                    if(kc == 83){
-                        vidEl.current.pause()
-                        setSettings({...settingsRef.current, isOpened: toggleBool(settingsRef.current.isOpened)});
-                    }
-
-                }, true)
+                
                 
                 // when a user changes the value of the range, change the video current tiem
                 inputEl.current.oninput = (e)=>{
                     vidEl.current.currentTime = Number(e.target.value);
+                    setVideoIsLoading(true)
                 }
                 
     
@@ -164,7 +206,6 @@ function Video({vid, setVid, settingsRef, setSettings}) {
     }, [])
 
     useEffect(()=>{
-        console.log(volume)
         if(volume > 0 && volume <= 1){
             setMuted(false)
             vidEl.current.volume = volume;
@@ -186,8 +227,14 @@ function Video({vid, setVid, settingsRef, setSettings}) {
         }
     }, [muted])
 
+    useEffect(()=>{
+        if(videoErorr){
+            window.alert(`Error: ${videoErorr.message}, code: ${videoErorr.code}`)
+        }
+    }, [videoErorr])
+
     return (
-        <div className="w-full h-full grid place-items-center bg-black relative">
+        <div className="w-full h-full grid place-items-center relative" style={{backgroundColor:settingsRef.current.backgroundColor.value}}>
             <div className="vid-contianer relative overflow-hidden w-full aspect-auto ">
 
                 <video 
@@ -196,9 +243,17 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     ref={vidEl}
                     ></video>
 
+                {/* loading screen for vid */}
+                {
+                    videoIsLoading &&
+                    <div className="absolute top-0 left-0 w-full h-full grid place-items-center backdrop-brightness-[.4] backdrop-filter">
+                        <div className="lds-ripple"><div></div><div></div></div>
+                    </div>
+                }
+
                 {/* upper nav */}
                 <div className="upper-nav-container absolute top-0 left-0 w-full block transform pb-20 transition-transform -translate-y-[60%] hover:translate-y-[0%]">
-                    <div className=" upper-nav flex items-center justify-between p-2 bg-black">
+                    <div className=" upper-nav flex items-center justify-between p-2 bg-black text-sm">
                         <h1 className="p-2">{vid.name}</h1>
                         <div className="p-2 block">
                             <FiSettings className="block hover:text-gray-300 cursor-pointer" onClick={()=>{setSettings({...settingsRef.current, isOpened: true})}} />
@@ -209,7 +264,9 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 {/* controllers */}
                 <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]"} hover:translate-y-[0%]`}>
                     <div className="w-full h-full flex flex-col bg-[#000000ab] backdrop-filter backdrop-opacity-25 relative ">
-                        <input ref={inputEl} type="range" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1"/>
+
+                        <input ref={inputEl} type="range" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1" />
+
                         <div className="flex justify-center items-center mt-2 mb-1 text-4xl ">
                             <div className="left-side flex items-center justify-end" style={{flexBasis: "100%"}}>
                                 {/* play pause button */}
@@ -230,13 +287,15 @@ function Video({vid, setVid, settingsRef, setSettings}) {
 
                                     </div>
 
-                                    <input type="range" className="ml-2 volume-input" step=".0000001" value={`${volume}`} tabIndex="-1" max="1" min="0" onInput={(e)=>setVolume(Number  (e.target.value))}/>
+                                    <input type="range" className="ml-2 volume-input" step=".0000001" value={`${volume}`} tabIndex="-1" max="1" min="0" onInput={(e)=>setVolume(Number(e.target.value))}/>
                                 </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
+
+
             </div>
 
             {
@@ -248,6 +307,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                             setPopup={setPopup}
                             />
             }
+
         </div>
     );
 }
