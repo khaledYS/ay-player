@@ -259,7 +259,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                         <h1 className="p-2">{vid.name}</h1>
                         <div className="p-2 flex justify-center items-center text-lg">
                             {vid.type.toLowerCase() === "url" && <BiCopyAlt className="block hover:text-gray-300 cursor-pointer" onClick={()=>{
-                                copy("hahha")
+                                console.log("copy is gonna be added soon.")
                             }} />}
                             <FiSettings className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
                                 setSettings({...settingsRef.current, isOpened: true})
