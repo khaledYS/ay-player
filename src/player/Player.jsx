@@ -1,11 +1,31 @@
-import { useRef, useState } from "react";
-import { Outlet } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Outlet, useHref, useInRouterContext, useLocation, useNavigate, useOutletContext, useParams } from "react-router";
 import Input from "./components/Input";
 import Settings from "./components/Settings";
 import Video from "./components/Video";
 
 function Player() {
     const [vid, setVid] = useState();
+    const urlParams = useLocation(); 
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(urlParams?.search.length > 1){
+            setVid(
+                {
+                    url: urlParams.search.replace("?", ""),
+                    name: "Anonymouse url", 
+                    type: "url"
+                }
+            )
+        }
+    }, [urlParams])
+    useEffect(()=>{
+        if(vid?.url && vid.url === false){
+            console.log(vid)
+            navigate("")
+        }
+    }, [vid])
 
     // this has to props first one is the boolean so it indicates wether it is open or not,
     //  the second value which is object and it indicates the settings.
@@ -35,7 +55,7 @@ function Player() {
 
     return ( 
         <div className="player w-full h-full bg-[#394E60] text-white text-2xl relative">
-            {vid ? <Video vid={vid} setVid={setVid} setSettings={setSettings} settingsRef={settingsRef} /> : <Input vid={vid} setVid={setVid} />}
+            {vid?.url ? <Video vid={vid} setVid={setVid} setSettings={setSettings} settingsRef={settingsRef} /> : <Input vid={vid} setVid={setVid} />}
             {settingsRef.current.isOpened && vid && <Settings setSettings={setSettings} settingsRef={settingsRef} />}
         </div>
      );

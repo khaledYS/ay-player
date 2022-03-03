@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import ConfirmationModal from "../../utils/confirmationModal/ConfirmationModal";
 import { BsPauseBtn, BsPlayBtn } from "react-icons/bs"
-import { BiVolumeMute, BiVolume, BiTrendingUp } from "react-icons/bi"
-import { FiSettings, FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi"
+import { BiVolumeMute, BiVolume, BiTrendingUp, BiCopy, BiCopyAlt, BiExit } from "react-icons/bi"
+import { FiCopy, FiSettings, FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi"
 import { toggleBool } from "../../utils";
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
@@ -68,7 +68,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 }
                 // handle esc button
                 if(key == "Escape"){
-                    setPopup(true)
+                    setPopup(true);
                 }
                 // if the settings panel is open or there is an error in the video, don't activate any of video keyboard shortcuts.
                 if(settingsRef.current.isOpened) return;
@@ -242,6 +242,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     src={vid.url} 
                     className=" aspect-auto max-h-[100vh] h-full w-full"
                     ref={vidEl}
+                    controls={false}
                     ></video>
 
                 {/* loading screen for vid */}
@@ -254,10 +255,18 @@ function Video({vid, setVid, settingsRef, setSettings}) {
 
                 {/* upper nav */}
                 <div className="upper-nav-container absolute top-0 left-0 w-full block transform pb-20 transition-transform -translate-y-[60%] hover:translate-y-[0%]">
-                    <div className=" upper-nav flex items-center justify-between p-2 bg-black text-sm">
+                    <div className=" upper-nav flex items-center justify-between p-2 bg-black text-lg">
                         <h1 className="p-2">{vid.name}</h1>
-                        <div className="p-2 block">
-                            <FiSettings className="block hover:text-gray-300 cursor-pointer" onClick={()=>{setSettings({...settingsRef.current, isOpened: true})}} />
+                        <div className="p-2 flex justify-center items-center text-lg">
+                            {vid.type.toLowerCase() === "url" && <BiCopyAlt className="block hover:text-gray-300 cursor-pointer" onClick={()=>{
+                                copy("hahha")
+                            }} />}
+                            <FiSettings className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
+                                setSettings({...settingsRef.current, isOpened: true})
+                            }} />
+                            <BiExit className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
+                                setPopup(true)
+                            }} />
                         </div>
                     </div>
                 </div>
@@ -303,7 +312,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 popup && <ConfirmationModal
                             title="Are you sure want to Exit this video?!"
                             acceptEvent={()=>{
-                                setVid()
+                                setVid({url:false});
                             }}
                             setPopup={setPopup}
                             />

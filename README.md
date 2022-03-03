@@ -41,8 +41,9 @@ use `KeyN` to Volume down
 <br>
 
 - [x] Add video loading state and catch fake urls.
+- [x] add when the user goes the player/:url, it should open the video with url without displaying the input component.
+- [ ] when the ah user clicks on the copy url btn, it should copy the url.
 - [ ] when clicking on number it should calculate the percintage of the video and depending on the number it should move to that percentage number in the current time of the video
-- [ ] add when the user goes the player/:url, it should open the video with url without displaying the input component.
 - [ ] add the mecanizm of duration time and current time in the controls div.
 - [ ] store settings and videos last stop in the local storage.
 - [ ] make the home page.

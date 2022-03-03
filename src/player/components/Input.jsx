@@ -1,22 +1,25 @@
+import { useNavigate } from "react-router";
+
 function Input({setVid, vid}) {
+    const navigate = useNavigate()
     return (
         <div className="Input w-full h-full flex flex-col justify-center items-center" >
             <input 
                 type="file"
                 accept="video/*"
-                className="cursor-pointer text-center flex justify-center items-center appearance-none" 
+                className="!cursor-pointer text-center flex justify-center items-center appearance-none" 
                 style={{
 
                 }}
                 onInput={(e)=>{
                     let file = e.target.files[0];
                     let url = window.URL.createObjectURL(file);
-                    setVid({name:file.name, url})
+                    setVid({name:file.name, url, type:"file"})
                 }}
                  />
                  <h1 className="my-8">- OR -</h1>
                  {/* via url */}
-                 <form className="flex input-group items-center justify-center" onSubmit={(e)=>{e.preventDefault();setVid({url:e.target.input.value, name:"Url video"})}}>
+                 <form className="flex input-group items-center justify-center" onSubmit={(e)=>{e.preventDefault();navigate(`?${e.target.input.value}`)}}>
                      <input type="text" id="input" placeholder="Enter Url" className="input input-ghost bg-slate-500 !text-white " min="10" required />
                      <button className="btn btn-square btn-accent">GO!</button>
                  </form>
