@@ -46,3 +46,4 @@ use `KeyN` to Volume down
 - [ ] add the mecanizm of duration time and current time in the controls div.
 - [ ] store settings and videos last stop in the local storage.
 - [ ] make the home page.
+- [ ] add the effect when changing the current time or the volume
