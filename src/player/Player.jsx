@@ -21,7 +21,7 @@ function Player() {
         }
     }, [urlParams])
     useEffect(()=>{
-        if(vid?.url && vid.url === false){
+        if(vid?.url === false){
             console.log(vid)
             navigate("")
         }
