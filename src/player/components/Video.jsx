@@ -193,9 +193,6 @@ function Video({vid, setVid, settingsRef, setSettings}) {
             vidEl.current.onwaiting = function() {
                 setVideoIsLoading(true)    
             }
-            vidEl.current.onsatlled = function() {
-                setVideoIsLoading(true)    
-            }
             vidEl.current.addEventListener("canplay",()=>{
                 setVideoIsLoading(false);
             })
