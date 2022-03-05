@@ -18,3 +18,48 @@ export function toggleBool(val, cb=()=>{}){
         throw new Error(error);
     }
 }
+
+export function msToTime (num){
+    let seconds = 0;
+    let minutes = 0;
+    let allMinutes = 0;
+    let hours = 0;
+    let allHours = 0;
+    let days = 0;
+
+    
+    seconds = num % 60;
+    allMinutes = (num - seconds) / 60; 
+    minutes = allMinutes % 60; 
+    allHours = (allMinutes - minutes) / 60;
+    hours = allHours % 24;
+    days = (allHours - hours) / 24
+
+    return {
+        seconds: Math.floor(seconds), 
+        minutes,
+        hours,
+        days,
+    }
+}
+
+
+export function prettyTime(D){
+    D = msToTime(D);
+    if(D.seconds.toString().length == 1){
+        D.seconds = `0${D.seconds}`;
+    }
+    if(D.days > 0){
+        return `${D.days}:${D.hours}:${D.minutes}:${D.seconds}`
+    }else if(D.hours > 0){
+        return `${D.hours}:${D.minutes}:${D.seconds}`
+    }else if(D.minutes.toString().length == 1){
+        return `${D.minutes}:${D.seconds}`
+    }
+}
+prettyTime(
+    {days: 0,
+    hours: 0,
+    minutes: 9,
+    seconds: 56}
+)
