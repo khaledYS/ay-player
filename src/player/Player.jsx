@@ -54,7 +54,7 @@ function Player() {
     }
 
     return ( 
-        <div className="player w-full h-full bg-[#394E60] text-white text-2xl relative">
+        <div className="Player w-full h-full bg-[#394E60] text-white text-2xl relative">
             {vid?.url ? <Video vid={vid} setVid={setVid} setSettings={setSettings} settingsRef={settingsRef} /> : <Input vid={vid} setVid={setVid} />}
             {settingsRef.current.isOpened && vid && <Settings setSettings={setSettings} settingsRef={settingsRef} />}
         </div>

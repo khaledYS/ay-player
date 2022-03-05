@@ -9,11 +9,11 @@
   box-sizing: border-box;
 }
 
-.player .controls input.customeVidRange{
+.Player .controls input.customeVidRange{
     background: transparent;
     border: none;
 }
-.player .controls:hover input.customeVidRange{
+.Player .controls:hover input.customeVidRange{
     border-radius: 999999px;
     transition: .1s ease-in-out all;
     background-color: #ffffff61;
@@ -121,24 +121,24 @@
 
 
 /* volume range */
-.player .controls input.volume-input{
+.Player .controls input.volume-input{
     background: transparent;
     border: none;
     width: 100%;
     transform: scaleX(0);
     transform-origin: left;
 }
-.player .controls input.volume-input{
+.Player .controls input.volume-input{
     border-radius: 999999px;
     transition: .1s ease-in-out all;
     background-color: #ffffff61;
 }
-.player .controls input.volume-input:hover{
+.Player .controls input.volume-input:hover{
     height: 15px;
     --thumb-height: 1rem;
     --thumb-width: 1rem;
 }
-.player .controls input.volume-input {
+.Player .controls input.volume-input {
   --thumb-height :  0rem ;
   --thumb-width : 0rem  ;
   --track-width: 100%;
@@ -150,13 +150,13 @@
   align-items: center;
   height: 6px;
 }
-.player .controls .volume-input-container:hover input.volume-input {
+.Player .controls .volume-input-container:hover input.volume-input {
     transform: scaleX(1);
 }
-.player .controls input.volume-input:focus {
+.Player .controls input.volume-input:focus {
   outline: none;
 }
-.player .controls input.volume-input::-webkit-slider-runnable-track {
+.Player .controls input.volume-input::-webkit-slider-runnable-track {
   width: var(--track-width);
   height: var(--track-height);
   cursor: pointer;
@@ -167,7 +167,7 @@
   align-items: center;
   justify-content: center;
 }
-.player .controls input.volume-input::-webkit-slider-thumb {
+.Player .controls input.volume-input::-webkit-slider-thumb {
   box-shadow: -100vw 0px 0px 99.5vw #44a9a9 !important;
   border: 0px solid #000000;
   height: var(--thumb-height);
@@ -178,7 +178,7 @@
   -webkit-appearance: none;
   /* transform: translateY(10%); */
 }
-.player .controls input.volume-input::-moz-range-track {
+.Player .controls input.volume-input::-moz-range-track {
   width: var(--track-width);
   height: var(--track-height);
   cursor: pointer;
@@ -189,7 +189,7 @@
   align-items: center;
   justify-content: center;
 }
-.player .controls input.volume-input::-moz-range-thumb {
+.Player .controls input.volume-input::-moz-range-thumb {
   box-shadow: -100vw 0px 0px 99.5vw #d58119 !important;
   border: 0px solid #000000;
   height: var(--thumb-height);
@@ -199,7 +199,7 @@
   cursor: pointer;
   /* transform: translateY(10%); */
 }
-.player .controls input.volume-input::-ms-track {
+.Player .controls input.volume-input::-ms-track {
   width: 100%;
   height: 12.8px;
   cursor: pointer;
@@ -208,19 +208,19 @@
   border-width: 39px 0;
   color: transparent;
 }
-.player .controls input.volume-input::-ms-fill-lower {
+.Player .controls input.volume-input::-ms-fill-lower {
   background: #ac51b5;
   border: 0px solid #000101;
   border-radius: 50px;
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
 }
-.player .controls input.volume-input::-ms-fill-upper {
+.Player .controls input.volume-input::-ms-fill-upper {
   background: #ac51b5;
   border: 0px solid #000101;
   border-radius: 50px;
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
 }
-.player .controls input.volume-input::-ms-thumb {
+.Player .controls input.volume-input::-ms-thumb {
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
   border: 0px solid #000000;
   height: 20px;
@@ -229,10 +229,10 @@
   background: #65001c;
   cursor: pointer;
 }
-.player .controls input.volume-input:focus::-ms-fill-lower {
+.Player .controls input.volume-input:focus::-ms-fill-lower {
   background: #ac51b5;
 }
-.player .controls input.volume-input:focus::-ms-fill-upper {
+.Player .controls input.volume-input:focus::-ms-fill-upper {
   background: #ac51b5;
 }
 
@@ -269,4 +269,32 @@
     height: 72px;
     opacity: 0;
   }
+}
+
+
+/* upload file input in the Player.jsx component  */
+.App > .Player > .Input > input[type="file"]{ 
+  appearance: none !important;
+  visibility: hidden  ;
+  position: relative;
+  width: min-content;
+}
+.App > .Player > .Input > input[type="file"]::before{
+  content: "choose file";
+  color: white;
+  visibility: visible;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+  padding: 10px 20px;
+  background: #26877d;
+  width: min-content;
+  border-radius: 10px;
+}
+.App > .Player > .Input > input[type="file"]:hover::before{
+  background: #31b8aa;
+}
+.App > .Player > .Input > input[type="file"] span{
+  color: black;
 }

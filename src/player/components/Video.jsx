@@ -32,11 +32,6 @@ function Video({vid, setVid, settingsRef, setSettings}) {
     let mounted = useRef(false);
 
     useEffect(()=>{
-        setVolume(volumeRef.current)
-        setMuted(mutedRef.current)
-    }, [mutedRef, volumeRef])
-
-    useEffect(()=>{
         mounted.current = true;
 
         
@@ -272,7 +267,8 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 </div>
 
                 {/* controllers */}
-                <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]"} hover:translate-y-[0%]`}>
+                <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${videoState ? settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]" : "translate-y-0"}
+                +' hover:translate-y-[0%]`}>
                     <div className="w-full h-full flex flex-col bg-[#000000ab] backdrop-filter backdrop-opacity-25 relative ">
 
                         <input ref={inputEl} type="range" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1" />
@@ -280,6 +276,9 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                         <div className="flex justify-center items-center mt-2 mb-1 text-4xl ">
                             <div className="left-side flex items-center justify-end" style={{flexBasis: "100%"}}>
                                 {/* play pause button */}
+                                <div>
+                                    49:94/3:0:3
+                                </div>
                                 <div className="cursor-pointer" onClick={()=>{vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause()}}>
                                     {videoState ? <BsPauseBtn /> : <BsPlayBtn />}
                                 </div>

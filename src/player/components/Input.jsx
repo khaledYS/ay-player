@@ -7,7 +7,7 @@ function Input({setVid, vid}) {
             <input 
                 type="file"
                 accept="video/*"
-                className="!cursor-pointer text-center flex justify-center items-center appearance-none" 
+                className="appearance-none" 
                 style={{
 
                 }}
