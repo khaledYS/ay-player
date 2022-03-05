@@ -122,13 +122,11 @@
 
 /* volume range */
 .Player .controls input.volume-input{
-    background: transparent;
+    background: gray;
     border: none;
     width: 100%;
     transform: scaleX(0);
     transform-origin: left;
-}
-.Player .controls input.volume-input{
     border-radius: 999999px;
     transition: .1s ease-in-out all;
     background-color: #ffffff61;
@@ -144,7 +142,6 @@
   --track-width: 100%;
   --track-height: 100%;
   -webkit-appearance: none;
-  background:transparent;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -160,7 +157,7 @@
   width: var(--track-width);
   height: var(--track-height);
   cursor: pointer;
-  background: transparent;
+  background: gray;
   border-radius: none;
   border: 0px solid #000101;
   display: flex;
@@ -182,7 +179,7 @@
   width: var(--track-width);
   height: var(--track-height);
   cursor: pointer;
-  background: transparent;
+  background: gray;
   border-radius: none;
   border: 0px solid #000101;
   display: flex;

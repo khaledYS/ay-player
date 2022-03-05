@@ -3,12 +3,17 @@ import ConfirmationModal from "../../utils/confirmationModal/ConfirmationModal";
 import { BsPauseBtn, BsPlayBtn } from "react-icons/bs"
 import { BiVolumeMute, BiVolume, BiTrendingUp, BiCopy, BiCopyAlt, BiExit } from "react-icons/bi"
 import { FiCopy, FiSettings, FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi"
-import { toggleBool } from "../../utils";
+import { msToTime, prettyTime, toggleBool } from "../../utils";
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
     const [videoState, setVideoState] = useState(false);
     const [videoIsLoading, setVideoIsLoading] = useState(true);
     const [videoErorr, setVideoError] = useState(false);
+
+    // D stands for duration
+    // CT stands for CurrentTime
+    const videoD = useRef(null);
+    const videoCT = useRef(null);
 
 
     // states can be changed even if its in a listener;
@@ -41,7 +46,122 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 if(!mounted.current) return ;
                 inputEl.current.value = vidEl.current.currentTime;
             }
-            
+
+
+            vidEl.current.addEventListener("loadedmetadata", (e)=>{
+
+                (()=>{
+                    let D = prettyTime(e.target.duration);
+                    videoD.current.textContent = D;
+                })();
+
+
+                // update the current time span whenever that video updates
+                e.target.addEventListener("timeupdate", (e)=>{
+                    let CT = e.target.currentTime;
+                    videoCT.current.textContent = prettyTime(CT);
+                })
+
+
+                // handle keyboard video shortcuts
+                window.addEventListener("keydown", (e)=>{
+                    if(!mounted.current) return ;
+                    
+                    const changeCurrentTime = (vid, currentTime) =>{
+                        vid.currentTime = currentTime;
+                        inputEl.current.value = vidEl.current.currentTime;
+                        setVideoIsLoading(true);
+                    }
+                    
+                    let code = e.code,
+                    key = e.key,
+                    kc = e.keyCode;
+                    // if the settings panel is open or there is an error in the video, don't activate any of video keyboard shortcuts.
+                    if(settingsRef.current.isOpened) return;
+                    if(videoErorr) return;                
+                    
+                    
+                    // handle moving the current time
+                    // '
+                    if(kc == 222){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime + 60
+                        )
+                    }
+        
+                    // ;
+                    if(kc == 186){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime + 20
+                        )
+                    }
+                    // l
+                    if(kc == 76 || kc == 39){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime + 5
+                        )
+                    }
+                    // j
+                    if(kc == 74){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime - 20
+                        )
+                    }
+                    // l
+                    if(kc == 75 || kc == 37){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime - 5
+                        )
+                    }
+                    // h
+                    if(kc == 72){
+                        changeCurrentTime(
+                            vidEl.current,
+                            vidEl.current.currentTime - 60
+                        )
+                    }
+                    
+                    
+                    // handle stop and play 
+                    // space
+                    if(kc == 32){
+                        vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause();
+                    }
+                    
+                    if(e.code == "KeyM"){
+                        if(mutedRef.current){
+                            setMuted(false)
+                        }else{
+                            setMuted(true)
+                        }
+                    }
+        
+                    // // volumeUp : i,arrowUP
+                    if(kc == 73 || kc == 38){
+                        let newVol = volumeRef.current + Number(settingsRef.current.changeVolumeBy.value);
+                        if(newVol > 1){
+                            newVol = 1;
+                        }
+                        setVolume(newVol);
+                    }
+                    // volumeDown : n, arrowDown
+                    if(kc == 78 || kc == 40){
+                        let newVol = volumeRef.current - Number(settingsRef.current.changeVolumeBy.value);
+                        if(newVol < 0){
+                            newVol = 0;
+                        }
+                        setVolume(newVol);
+                    }
+        
+        
+        
+                }, true)
+            })
             // handle keyboard shortcuts
             window.addEventListener("keydown", (e)=>{
                 if(!mounted.current) return ;
@@ -64,91 +184,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 // handle esc button
                 if(key == "Escape"){
                     setPopup(true);
-                }
-                // if the settings panel is open or there is an error in the video, don't activate any of video keyboard shortcuts.
-                if(settingsRef.current.isOpened) return;
-                if(videoErorr) return;                
-                
-                
-                // handle moving the current time
-                // '
-                if(kc == 222){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime + 60
-                    )
-                }
-    
-                // ;
-                if(kc == 186){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime + 20
-                    )
-                }
-                // l
-                if(kc == 76 || kc == 39){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime + 5
-                    )
-                }
-                // j
-                if(kc == 74){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime - 20
-                    )
-                }
-                // l
-                if(kc == 75 || kc == 37){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime - 5
-                    )
-                }
-                // h
-                if(kc == 72){
-                    changeCurrentTime(
-                        vidEl.current,
-                        vidEl.current.currentTime - 60
-                    )
-                }
-                
-                
-                // handle stop and play 
-                // space
-                if(kc == 32){
-                    vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause();
-                }
-                
-                if(e.code == "KeyM"){
-                    if(mutedRef.current){
-                        setMuted(false)
-                    }else{
-                        setMuted(true)
-                    }
-                }
-    
-                // // volumeUp : i,arrowUP
-                if(kc == 73 || kc == 38){
-                    let newVol = volumeRef.current + Number(settingsRef.current.changeVolumeBy.value);
-                    if(newVol > 1){
-                        newVol = 1;
-                    }
-                    setVolume(newVol);
-                }
-                // volumeDown : n, arrowDown
-                if(kc == 78 || kc == 40){
-                    let newVol = volumeRef.current - Number(settingsRef.current.changeVolumeBy.value);
-                    if(newVol < 0){
-                        newVol = 0;
-                    }
-                    setVolume(newVol);
-                }
-    
-    
-    
+                }  
             }, true)
             
             vidEl.current.onerror = function(e) {
@@ -238,6 +274,8 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     className=" aspect-auto max-h-[100vh] h-full w-full"
                     ref={vidEl}
                     controls={false}
+                    autoPlay
+                    playsInline
                     ></video>
 
                 {/* loading screen for vid */}
@@ -249,7 +287,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 }
 
                 {/* upper nav */}
-                <div className="upper-nav-container absolute top-0 left-0 w-full block transform pb-20 transition-transform -translate-y-[60%] hover:translate-y-[0%]">
+                <div className={`upper-nav-container absolute top-0 left-0 w-full block transform pb-20 transition-transform ${videoState ? "-translate-y-[60%]" : "translate-y-0" } hover:translate-y-[0%]`}>
                     <div className=" upper-nav flex items-center justify-between p-2 bg-black text-lg">
                         <h1 className="p-2">{vid.name}</h1>
                         <div className="p-2 flex justify-center items-center text-lg">
@@ -267,18 +305,21 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 </div>
 
                 {/* controllers */}
-                <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${videoState ? settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]" : "translate-y-0"}
-                +' hover:translate-y-[0%]`}>
+                <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${videoState ? settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]" : "translate-y-0"} hover:translate-y-[0%]`}>
                     <div className="w-full h-full flex flex-col bg-[#000000ab] backdrop-filter backdrop-opacity-25 relative ">
 
-                        <input ref={inputEl} type="range" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1" />
+                        <input ref={inputEl} type="range" defaultValue="0" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1" />
 
                         <div className="flex justify-center items-center mt-2 mb-1 text-4xl ">
                             <div className="left-side flex items-center justify-end" style={{flexBasis: "100%"}}>
-                                {/* play pause button */}
-                                <div>
-                                    49:94/3:0:3
+                                {/* video current time / video duration */}
+                                <div className="duration text-lg mx-3.5" >
+                                    <span className="VideoCurrentTime" ref={videoCT}>00:00</span>
+                                    {" / "}
+                                    <span className="VideoDuration" ref={videoD}>00:00</span>
                                 </div>
+
+                                {/* play pause button */}
                                 <div className="cursor-pointer" onClick={()=>{vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause()}}>
                                     {videoState ? <BsPauseBtn /> : <BsPlayBtn />}
                                 </div>

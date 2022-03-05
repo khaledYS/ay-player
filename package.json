@@ -9,11 +9,12 @@
     "tailwind:watch": "npx tailwindcss -i ./src/styles/App.css -o ./src/tailwind/output.css --watch",
     "tailwind:build": "npx tailwindcss -o ./src/tailwind/output.css --minify",
     "build": "npm run vite:build && npm run tailwind:build",
-    "dev": "start npm run tailwind:watch && npm run vite:dev", 
-    "fixed:issue" : "npm run build && git add * && git commit -m \"fixed an issue\" && git push origin master && npm run preview"
+    "dev": "start npm run tailwind:watch && npm run vite:dev",
+    "fixed:issue": "npm run build && git add * && git commit -m \"fixed an issue\" && git push origin master && npm run preview"
   },
   "dependencies": {
     "daisyui": "^2.2.0",
+    "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
