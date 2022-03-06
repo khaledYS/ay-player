@@ -202,12 +202,11 @@ function Video({vid, setVid, settingsRef, setSettings}) {
 
                 // when the user hover over the video range input, it should show a tool tip telling what's the duration;
                 inputEl.current.addEventListener("mousemove", (e)=>{
-                    console.log(e)
                     let CTTWidth = CTTooltip.current.offsetWidth;
                     let CTTPos = e.offsetX;
-                    let res = CTTPos + "px";
-                    let hoveredCT = percentageFromBoth({from: CTTPos,all: CTTWidth},{from: null,all: vidEl.current.duration});
+                    let hoveredCT = percentageFromBoth({from: CTTPos,all: e.target.offsetWidth},{from: null,all: vidEl.current.duration});
                     CTTooltip.current.textContent = prettyTime(hoveredCT);
+                    let res = CTTPos + "px";
                     if((CTTPos + (CTTWidth / 2)) > e.target.offsetWidth){
                         res = e.target.offsetWidth - CTTWidth + "px";
                         CTTooltip.current.style.transform = "translateX(0%) translateY(-180%)"
@@ -218,7 +217,6 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                         CTTooltip.current.style.transform = "translateX(-50%) translateY(-180%)";
                     }
                     CTTooltip.current.style.left = res;
-                    console.log(CTTooltip.current.className)
                     CTTooltip.current.classList.add("active");
                 })
                 inputEl.current.addEventListener("mouseleave", (e)=>{
