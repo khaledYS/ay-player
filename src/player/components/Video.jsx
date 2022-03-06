@@ -3,17 +3,18 @@ import ConfirmationModal from "../../utils/confirmationModal/ConfirmationModal";
 import { BsPauseBtn, BsPlayBtn } from "react-icons/bs"
 import { BiVolumeMute, BiVolume, BiTrendingUp, BiCopy, BiCopyAlt, BiExit } from "react-icons/bi"
 import { FiCopy, FiSettings, FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi"
-import { msToTime, prettyTime, toggleBool } from "../../utils";
+import { msToTime, percentageFromBoth, prettyTime, toggleBool } from "../../utils";
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
     const [videoState, setVideoState] = useState(false);
     const [videoIsLoading, setVideoIsLoading] = useState(true);
     const [videoErorr, setVideoError] = useState(false);
-
+    
     // D stands for duration
     // CT stands for CurrentTime
     const videoD = useRef(null);
     const videoCT = useRef(null);
+    const CTTooltip = useRef(null)
 
 
     // states can be changed even if its in a listener;
@@ -42,14 +43,15 @@ function Video({vid, setVid, settingsRef, setSettings}) {
         
         function update(){
             
+
             function updateRangeInput(){
                 if(!mounted.current) return ;
                 inputEl.current.value = vidEl.current.currentTime;
             }
 
-
+            
             vidEl.current.addEventListener("loadedmetadata", (e)=>{
-
+                
                 (()=>{
                     let D = prettyTime(e.target.duration);
                     videoD.current.textContent = D;
@@ -197,6 +199,32 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 setVideoIsLoading(false);
             })
             vidEl.current.addEventListener("loadeddata", (e)=>{
+
+                // when the user hover over the video range input, it should show a tool tip telling what's the duration;
+                inputEl.current.addEventListener("mousemove", (e)=>{
+                    console.log(e)
+                    let CTTWidth = CTTooltip.current.offsetWidth;
+                    let CTTPos = e.offsetX;
+                    let res = CTTPos + "px";
+                    let hoveredCT = percentageFromBoth({from: CTTPos,all: CTTWidth},{from: null,all: vidEl.current.duration});
+                    CTTooltip.current.textContent = prettyTime(hoveredCT);
+                    if((CTTPos + (CTTWidth / 2)) > e.target.offsetWidth){
+                        res = e.target.offsetWidth - CTTWidth + "px";
+                        CTTooltip.current.style.transform = "translateX(0%) translateY(-180%)"
+                    }else if (CTTPos - (CTTWidth / 2) < 0){
+                        res = "0px";
+                        CTTooltip.current.style.transform = "translateX(0%) translateY(-180%)"
+                    }else{
+                        CTTooltip.current.style.transform = "translateX(-50%) translateY(-180%)";
+                    }
+                    CTTooltip.current.style.left = res;
+                    console.log(CTTooltip.current.className)
+                    CTTooltip.current.classList.add("active");
+                })
+                inputEl.current.addEventListener("mouseleave", (e)=>{
+                    CTTooltip.current.classList.remove("active");
+                })
+
                 mounted.current = true;
     
                 inputEl.current.setAttribute("max", vidEl.current.duration);
@@ -304,10 +332,23 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 {/* controllers */}
                 <div className={`controls absolute bottom-0 left-0 w-full block transform transition-all pt-12 ${videoState ? settingsRef.current.showTimelineProgress.value ? "translate-y-[50%]" : "translate-y-[60%]" : "translate-y-0"} hover:translate-y-[0%]`}>
                     <div className="w-full h-full flex flex-col bg-[#000000ab] backdrop-filter backdrop-opacity-25 relative ">
+                        <div className="customeVidRange-con relative -z-10">
+                            {/* toottiop of the hovered currentTime */}
+                            <div 
+                                className="CTTooltipOfVideoRangeInput absolute bg-white text-black" 
+                                ref={CTTooltip}
+                                >
+                                44:44
+                            </div>
+                            <input 
+                                ref={inputEl}  
+                                type="range"   
+                                defaultValue="0" 
+                                className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" 
+                                tabIndex="-1" />
+                        </div>
 
-                        <input ref={inputEl} type="range" defaultValue="0" className="customeVidRange m-0 rounded-none !text-black !shadow-md absolute top-0 transform -translate-y-full" tabIndex="-1" />
-
-                        <div className="flex justify-center items-center mt-2 mb-1 text-4xl ">
+                        <div className="flex justify-center items-center mt-2 mb-1 text-4xl z-10">
                             <div className="left-side flex items-center justify-end" style={{flexBasis: "100%"}}>
                                 {/* video current time / video duration */}
                                 <div className="duration text-lg mx-3.5" >

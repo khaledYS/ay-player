@@ -10,7 +10,7 @@
 }
 
 .Player .controls input.customeVidRange{
-    background: transparent;
+    background: #4a4a4a;
     border: none;
 }
 .Player .controls:hover input.customeVidRange{
@@ -294,4 +294,47 @@
 }
 .App > .Player > .Input > input[type="file"] span{
   color: black;
+}
+
+/* CTTooltipOfVideoRangeInput */
+.CTTooltipOfVideoRangeInput{
+  transform: translateX(-50%) translateY(0%);
+  opacity: 0;
+  font-size: 1rem;
+  padding: .2rem .4rem;
+  border-radius: 5px;
+  color: white;
+  background: #4a4a4a;
+  width: fit-content;
+  position: absolute;
+}
+.CTTooltipOfVideoRangeInput::before{
+  --arrow-size: .7rem;
+  --arrow-color: #4a4a4a;
+  content: "";
+  width: 0; 
+  height: 0; 
+  border-left: var(--arrow-size) solid transparent;
+  border-right: var(--arrow-size) solid transparent;
+  border-top: var(--arrow-size) solid var(--arrow-color);
+
+  position: absolute;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  left: 50%;
+  
+}
+.CTTooltipOfVideoRangeInput.active{
+  transform: translateX(-50%) translateY(-180%);
+  opacity: 1;
+  animation: animateCTTooltip .25s ease-in-out;
+}
+@keyframes animateCTTooltip {
+  0%{
+    transform: translateX(-50%) translateY(-0%);
+    opacity: 0;
+  }
+  60%{
+    opacity: 0;
+  }
 }

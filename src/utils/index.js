@@ -57,9 +57,15 @@ export function prettyTime(D){
         return `${D.minutes}:${D.seconds}`
     }
 }
-prettyTime(
-    {days: 0,
-    hours: 0,
-    minutes: 9,
-    seconds: 56}
-)
+export function percentageFromBoth(
+    FST={
+        from:  100,
+        all: 200
+    },
+    SST={
+        from: null,
+        all: 3000
+    }
+) {
+    return (FST.from * SST.all) / FST.all
+}

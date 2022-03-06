@@ -2317,6 +2317,13 @@ body[dir=rtl] .checkbox:checked,body[dir=rtl] .checkbox[checked=true] {
   display: none;
 }
 
+.menu :where(li:not(.menu-title):not(:empty))>:where(:not(ul).active),.menu :where(li:not(.menu-title):not(:empty))>:where(:not(ul):active) {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--p) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsl(var(--pc) / var(--tw-text-opacity));
+}
+
 @-webkit-keyframes radiomark {
   0% {
     box-shadow: 0 0 0 12px hsl(var(--b1)) inset,0 0 0 12px hsl(var(--b1)) inset;
@@ -2475,6 +2482,16 @@ body[dir=rtl] .checkbox:checked,body[dir=rtl] .checkbox[checked=true] {
   content: attr(data-content);
 }
 
+.table tr.active td,.table tr.active th,.table tr.active:nth-child(even) td,.table tr.active:nth-child(even) th {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b3,var(--b2)) / var(--tw-bg-opacity));
+}
+
+.table tr.hover:hover td,.table tr.hover:hover th,.table tr.hover:nth-child(even):hover td,.table tr.hover:nth-child(even):hover th {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b3,var(--b2)) / var(--tw-bg-opacity));
+}
+
 .toggle:focus-visible {
   outline: 2px solid hsl(var(--bc));
   outline-offset: 2px;
@@ -2612,6 +2629,14 @@ body[dir=rtl] .checkbox:checked,body[dir=rtl] .checkbox[checked=true] {
 
 .bottom-0 {
   bottom: 0px;
+}
+
+.-z-10 {
+  z-index: -10;
+}
+
+.z-10 {
+  z-index: 10;
 }
 
 .m-0 {
@@ -2974,7 +2999,7 @@ body[dir=rtl] .checkbox:checked,body[dir=rtl] .checkbox[checked=true] {
 }
 
 .Player .controls input.customeVidRange{
-  background: transparent;
+  background: #4a4a4a;
   border: none;
 }
 
@@ -3319,6 +3344,66 @@ body[dir=rtl] .checkbox:checked,body[dir=rtl] .checkbox[checked=true] {
 
 .App > .Player > .Input > input[type="file"] span{
   color: black;
+}
+
+/* CTTooltipOfVideoRangeInput */
+
+.CTTooltipOfVideoRangeInput{
+  transform: translateX(-50%) translateY(0%);
+  opacity: 0;
+  font-size: 1rem;
+  padding: .2rem .4rem;
+  border-radius: 5px;
+  color: white;
+  background: #4a4a4a;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  position: absolute;
+}
+
+.CTTooltipOfVideoRangeInput::before{
+  --arrow-size: .7rem;
+  --arrow-color: #4a4a4a;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: var(--arrow-size) solid transparent;
+  border-right: var(--arrow-size) solid transparent;
+  border-top: var(--arrow-size) solid var(--arrow-color);
+  position: absolute;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  left: 50%;
+}
+
+.CTTooltipOfVideoRangeInput.active{
+  transform: translateX(-50%) translateY(-180%);
+  opacity: 1;
+  -webkit-animation: animateCTTooltip .25s ease-in-out;
+          animation: animateCTTooltip .25s ease-in-out;
+}
+
+@-webkit-keyframes animateCTTooltip {
+  0%{
+    transform: translateX(-50%) translateY(-0%);
+    opacity: 0;
+  }
+
+  60%{
+    opacity: 0;
+  }
+}
+
+@keyframes animateCTTooltip {
+  0%{
+    transform: translateX(-50%) translateY(-0%);
+    opacity: 0;
+  }
+
+  60%{
+    opacity: 0;
+  }
 }
 
 .hover\:translate-y-\[0\%\]:hover {

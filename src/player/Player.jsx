@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Outlet, useHref, useInRouterContext, useLocation, useNavigate, useOutletContext, useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import Input from "./components/Input";
 import Settings from "./components/Settings";
 import Video from "./components/Video";
