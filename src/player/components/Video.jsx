@@ -88,7 +88,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     if(/[0-9]/g.test(key)){
                         let number = Number(key);
 
-                        if(!isNaN(number) || key != " "){
+                        if(!isNaN(number) && key != " "){
                             // CNT stands for currentNewTime
                             let CNT = percentageFromBoth({
                                     from:number,
