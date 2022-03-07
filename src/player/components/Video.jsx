@@ -82,7 +82,25 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     if(settingsRef.current.isOpened) return;
                     if(videoErorr) return;                
                     
+                    console.log(e)
                     
+                    // handle the numbers clicks, and navigate the current time of the video debending on percentage.
+                    if(/[0-9]/g.test(key)){
+                        let number = Number(key);
+
+                        if(!isNaN(number) || key != " "){
+                            // CNT stands for currentNewTime
+                            let CNT = percentageFromBoth({
+                                    from:number,
+                                    all: 10
+                                }, {
+                                    from: null,
+                                    all: vidEl.current.duration
+                               })
+                            vidEl.current.currentTime = CNT;
+                        }
+                    }
+
                     // handle moving the current time
                     // '
                     if(kc == 222){
@@ -219,7 +237,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     CTTooltip.current.style.left = res;
                     CTTooltip.current.classList.add("active");
                 })
-                inputEl.current.addEventListener("mouseleave", (e)=>{
+                inputEl.current.addEventListener("mouseleave", ()=>{
                     CTTooltip.current.classList.remove("active");
                 })
 
