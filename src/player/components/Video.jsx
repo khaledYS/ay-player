@@ -7,7 +7,6 @@ import { msToTime, percentageFromBoth, prettyTime, toggleBool } from "../../util
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
     const [videoState, setVideoState] = useState(false);
-    const [videoIsLoading, setVideoIsLoading] = useState(true);
     const [videoErorr, setVideoError] = useState(false);
     
     // D stands for duration
@@ -15,7 +14,14 @@ function Video({vid, setVid, settingsRef, setSettings}) {
     const videoD = useRef(null);
     const videoCT = useRef(null);
     const CTTooltip = useRef(null)
-
+    
+    // video is loading
+    const [videoIsLoading, _setVideoIsLoading] = useState(true);
+    const videoIsLoadingRef = useRef(videoIsLoading);
+    const setVideoIsLoading = (data)=>{
+        videoIsLoadingRef.current = data;
+        _setVideoIsLoading(data);
+    }
 
     // states can be changed even if its in a listener;
     const [volume, _setVolume] = useState(0.5)
@@ -37,34 +43,39 @@ function Video({vid, setVid, settingsRef, setSettings}) {
     const inputEl = useRef()
     let mounted = useRef(false);
 
+    const playOrStopVideo = ()=>{
+        if(!vidEl.current.paused){
+            vidEl.current.pause();
+        }else if(!videoIsLoadingRef.current){
+            vidEl.current.play();
+        }else{
+            console.log("%c playing the video is canceled bcz of a problem", "color: yellow; font-size: 1rem;")
+        }
+    }
+
     useEffect(()=>{
         mounted.current = true;
 
+        // update the current time span whenever that video updates
+        vidEl.current.addEventListener("timeupdate", ()=>{
+            let CT = prettyTime(vidEl.current.currentTime);
+            videoCT.current.textContent = CT;
+        })    
         
         function update(){
             
-
+            
             function updateRangeInput(){
                 if(!mounted.current) return ;
                 inputEl.current.value = vidEl.current.currentTime;
             }
-
             
             vidEl.current.addEventListener("loadedmetadata", (e)=>{
-                
                 (()=>{
                     let D = prettyTime(e.target.duration);
                     videoD.current.textContent = D;
                 })();
-
-
-                // update the current time span whenever that video updates
-                e.target.addEventListener("timeupdate", (e)=>{
-                    let CT = e.target.currentTime;
-                    videoCT.current.textContent = prettyTime(CT);
-                })
-
-
+                
                 // handle keyboard video shortcuts
                 window.addEventListener("keydown", (e)=>{
                     if(!mounted.current) return ;
@@ -82,12 +93,11 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     if(settingsRef.current.isOpened) return;
                     if(videoErorr) return;                
                     
-                    console.log(e)
                     
                     // handle the numbers clicks, and navigate the current time of the video debending on percentage.
                     if(/[0-9]/g.test(key)){
                         let number = Number(key);
-
+                        
                         if(!isNaN(number) && key != " "){
                             // CNT stands for currentNewTime
                             let CNT = percentageFromBoth({
@@ -97,6 +107,8 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                                     from: null,
                                     all: vidEl.current.duration
                                })
+                            setVideoIsLoading(true);
+                            inputEl.current.value = CNT;
                             vidEl.current.currentTime = CNT;
                         }
                     }
@@ -150,7 +162,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     // handle stop and play 
                     // space
                     if(kc == 32){
-                        vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause();
+                        playOrStopVideo()
                     }
                     
                     if(e.code == "KeyM"){
@@ -200,11 +212,10 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 if(kc == 83){
                     vidEl.current.pause()
                     setSettings({...settingsRef.current, isOpened: toggleBool(settingsRef.current.isOpened)});
-                }
-                // handle esc button
-                if(key == "Escape"){
+                }// handle esc button
+                else if(key == "Escape"){
                     setPopup(true);
-                }  
+                }
             }, true)
             
             vidEl.current.onerror = function(e) {
@@ -247,7 +258,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                 updateRangeInput()
                 
                 // when the video current time changes, change the value of the range input
-                vidEl.current.ontimeupdate = updateRangeInput;
+                vidEl.current.addEventListener("timeupdate", updateRangeInput)
                 
                 // when the vid is true;
                 vidEl.current.onpause = ()=>{setVideoState(false)}
@@ -374,7 +385,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                                 </div>
 
                                 {/* play pause button */}
-                                <div className="cursor-pointer" onClick={()=>{vidEl.current.paused ? vidEl.current.play() : vidEl.current.pause()}}>
+                                <div className="cursor-pointer" onClick={()=>{playOrStopVideo()}}>
                                     {videoState ? <BsPauseBtn /> : <BsPlayBtn />}
                                 </div>
                             </div>
