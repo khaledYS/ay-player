@@ -69,3 +69,19 @@ export function percentageFromBoth(
 ) {
     return (FST.from * SST.all) / FST.all
 }
+
+export async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+        try{
+            return await document.execCommand('copy', true, text);
+        } catch {
+            try{
+                await window.clipboardData.setData("Text", text)
+            } catch(err){
+                console.warn(err)
+            }
+        }
+    }
+  }

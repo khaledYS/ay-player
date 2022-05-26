@@ -3,7 +3,7 @@ import ConfirmationModal from "../../utils/confirmationModal/ConfirmationModal";
 import { BsPauseBtn, BsPlayBtn } from "react-icons/bs"
 import { BiVolumeMute, BiVolume, BiTrendingUp, BiCopy, BiCopyAlt, BiExit } from "react-icons/bi"
 import { FiCopy, FiSettings, FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi"
-import { msToTime, percentageFromBoth, prettyTime, toggleBool } from "../../utils";
+import { copyTextToClipboard, msToTime, percentageFromBoth, prettyTime, toggleBool } from "../../utils";
 function Video({vid, setVid, settingsRef, setSettings}) {
     const [popup, setPopup] = useState(false);
     const [videoState, setVideoState] = useState(false);
@@ -344,7 +344,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                         <h1 className="p-2">{vid.name}</h1>
                         <div className="p-2 flex justify-center items-center text-lg">
                             {vid.type.toLowerCase() === "url" && <BiCopyAlt title="copy url" className="block hover:text-gray-300 cursor-pointer" onClick={()=>{
-                                console.log("copy is gonna be added soon.")
+                                copyTextToClipboard(location.href)
                             }} />}
                             <FiSettings title="video player settings" className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
                                 setSettings({...settingsRef.current, isOpened: true})
