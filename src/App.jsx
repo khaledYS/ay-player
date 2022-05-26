@@ -10,6 +10,8 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(()=>{
+    // title of the page
+    document.title = "AY-player"
     if(location.pathname === "/"){
       navigate("/player")
     }
