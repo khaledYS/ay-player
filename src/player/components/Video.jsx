@@ -343,13 +343,13 @@ function Video({vid, setVid, settingsRef, setSettings}) {
                     <div className=" upper-nav flex items-center justify-between p-2 bg-black text-lg">
                         <h1 className="p-2">{vid.name}</h1>
                         <div className="p-2 flex justify-center items-center text-lg">
-                            {vid.type.toLowerCase() === "url" && <BiCopyAlt className="block hover:text-gray-300 cursor-pointer" onClick={()=>{
+                            {vid.type.toLowerCase() === "url" && <BiCopyAlt title="copy url" className="block hover:text-gray-300 cursor-pointer" onClick={()=>{
                                 console.log("copy is gonna be added soon.")
                             }} />}
-                            <FiSettings className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
+                            <FiSettings title="video player settings" className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
                                 setSettings({...settingsRef.current, isOpened: true})
                             }} />
-                            <BiExit className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
+                            <BiExit title="Exit player"     className="block hover:text-gray-300 cursor-pointer ml-2.5" onClick={()=>{
                                 setPopup(true)
                             }} />
                         </div>
@@ -386,7 +386,7 @@ function Video({vid, setVid, settingsRef, setSettings}) {
 
                                 {/* play pause button */}
                                 <div className="cursor-pointer" onClick={()=>{playOrStopVideo()}}>
-                                    {videoState ? <BsPauseBtn /> : <BsPlayBtn />}
+                                    {videoState ? <BsPauseBtn title="pause video" /> : <BsPlayBtn title="play video" />}
                                 </div>
                             </div>
                             <div className="right-side  flex items-center justify-start" style={{flexBasis: "100%"}}>
